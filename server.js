@@ -48,21 +48,75 @@ app.use(express.static(publicDir));
 
 // --- API Routes ---
 
-// 1. Chatbot Endpoint Placeholder
+// 1. Chatbot Endpoint using Groq
 app.post('/api/chat', async (req, res) => {
     try {
-        const { message, language } = req.body;
-        // In the future, integrate with @google/genai or Google AI Studio here
-        console.log(`Received message in ${language || 'en'}: ${message}`);
+        require('dotenv').config({ override: true }); // Ensure latest .env is loaded
+        const { messages, lang } = req.body;
         
-        // Placeholder response
+        if (!messages || messages.length === 0) {
+            return res.status(400).json({ success: false, error: 'No messages provided.' });
+        }
+        
+        if (!process.env.GROQ_API_KEY) {
+            return res.status(500).json({ success: false, error: 'Missing Groq API Key', reply: "Whoops! The API key is missing. Please add GROQ_API_KEY to your .env file." });
+        }
+        
+        const systemInstruction = `You are Aria, a warm, compassionate AI companion for HerShield. You help users with:
+- Setting up emergency check-in timers
+- Adding emergency contacts
+- Understanding HerShield features
+- Personal safety tips
+- Emotional support in distressing situations
+
+CRITICAL LANGUAGE RULE: Always respond in the EXACT SAME LANGUAGE as the user (e.g., if code is ${lang}, respond in that language). If they write in Hindi, respond in Hindi.
+
+For emergency situations:
+- Respond with empathy and urgency
+- Remind them to use HerShield's SOS feature
+- Suggest calling local emergency services
+- Stay calm and supportive
+
+Keep responses concise, warm, and helpful. Use occasional emojis.`;
+
+        // Format for Groq Chat Completions
+        const groqMessages = [
+            { role: "system", content: systemInstruction },
+            ...messages.map(msg => ({
+                role: msg.role === 'assistant' ? 'assistant' : 'user',
+                content: msg.content
+            }))
+        ];
+
+        const groqResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: groqMessages,
+                max_tokens: 350
+            })
+        });
+
+        if (!groqResponse.ok) {
+             const errData = await groqResponse.text();
+             console.error("Groq API Error:", errData);
+             throw new Error("Groq API Request Failed");
+        }
+
+        const data = await groqResponse.json();
+        const reply = data.choices[0].message.content;
+        
         res.json({
             success: true,
-            reply: `You said: "${message}". AI integration is pending.`
+            reply: reply
         });
     } catch (error) {
         console.error('Chat API Error:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).json({ success: false, error: 'Internal Server Error', reply: "I'm having trouble connecting to my brain right now. Please try again or use the quick access buttons if you need immediate help." });
     }
 });
 
