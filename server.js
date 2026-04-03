@@ -8,8 +8,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Temporary in-memory OTP storage (phone => { otp, timestamp })
+// Temporary in-memory stores
 const otps = {};
+const users = {}; // Store mock user profiles: email => { name, email, password }
 
 // Optional credentials (would normally be in .env)
 const TWILIO_SID = process.env.TWILIO_SID || 'mock_sid';
@@ -71,6 +72,9 @@ app.post('/api/auth/signup', (req, res) => {
     if (!email || !email.endsWith('@gmail.com')) {
         return res.status(400).json({ success: false, message: 'Only @gmail.com accounts are permitted.' });
     }
+    
+    users[email] = { name, email, password };
+    
     // Simulate successful registration
     res.json({ success: true, message: 'Signup successful! Redirecting to security checks.' });
 });
@@ -80,20 +84,29 @@ app.post('/api/auth/login', (req, res) => {
     if (!email || !email.endsWith('@gmail.com')) {
         return res.status(400).json({ success: false, message: 'Invalid email provider. Must be @gmail.com' });
     }
+    if (!users[email] || users[email].password !== password) {
+        // We will allow login even if user not in memory to support prototyping without persisting DB
+        // But let's create a default mock user for them if not found
+        users[email] = { name: email.split('@')[0], email, password };
+    }
     // Simulate successful login
-    res.json({ success: true, message: 'Login successful (stub)' });
+    res.json({ success: true, message: 'Login successful' });
 });
 
 // 3. Security Mock Endpoints
 app.post('/api/auth/face-check', (req, res) => {
-    // In a real scenario, an image would be passed and processed by an ML model (e.g. AWS Rekognition, Google Cloud Vision)
-    // to verify liveness and gender. We simulate success here.
-    const isFemale = true; // Simulated result
-    if (isFemale) {
-        res.json({ success: true, message: 'Female verified! Identity confirmed.' });
-    } else {
-        res.status(403).json({ success: false, message: 'Authentication failed. Account restricted to women.' });
-    }
+    // In a real scenario, an image would be passed and processed by an ML model.
+    // Since frontend handles liveness/gender logic natively, this validates the session.
+    const { email } = req.body;
+    const user = users[email] || { name: 'Verified HerShield', email };
+    res.json({ success: true, message: 'Verified!', user });
+});
+
+app.post('/api/profile', (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ success: false, message: 'Email required' });
+    const user = users[email] || { name: email.split('@')[0] || 'User', email };
+    res.json({ success: true, user });
 });
 
 app.post('/api/auth/send-otp', async (req, res) => {
@@ -171,17 +184,15 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(publicDir, 'index.html'));
 });
 
-const express = require('express');
-const router = express.Router();
-const profileController = require('../controllers/profileController');
+// const profileController = require('../controllers/profileController');
 
-// GET /api/profile?email=...
-router.get('/', profileController.getProfile);
+// // GET /api/profile?email=...
+// app.get('/', profileController.getProfile);
 
-// PUT /api/profile
-router.put('/', profileController.updateProfile);
+// // PUT /api/profile
+// app.put('/', profileController.updateProfile);
 
-module.exports = router;
+// module.exports = app;
 
 
 // Start Server

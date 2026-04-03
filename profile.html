@@ -1963,20 +1963,20 @@
     <!-- NAV -->
     <nav>
         <div class="nav-inner">
-            <a class="logo" href="#">
+            <a class="logo" href="index.html">
                 <div class="logo-mark">❤️</div>
                 Her<span class="hi">Shield</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="chatbot.html">Chatbot</a></li>
-                <li><a href="">Safety Map</a></li>
-                <li><a href="#">Health Tracker</a></li>
-                <li><a href="#" class="active">Profile</a></li>
+                <li><a href="navregistration1.html">Safety Map</a></li>
+                <li><a href="health.html">Health Tracker</a></li>
+                <li><a href="profile.html" class="active">Profile</a></li>
             </ul>
             <div class="nav-user">
                 <span class="nav-name" id="nav-username">Priya</span>
-                <div class="nav-avatar" id="nav-avatar">P</div>
+                <a href="profile.html" style="text-decoration:none;"><div class="nav-avatar" id="nav-avatar">P</div></a>
                 <button class="btn-logout" onclick="logout()">Logout</button>
             </div>
         </div>
@@ -2389,11 +2389,29 @@
         }
 
         // ── Render profile to page ──
-        function renderProfile() {
-            const p = loadProfile();
-            const fullName = p.firstName + ' ' + p.lastName;
+        async function renderProfile() {
+            let p = loadProfile();
+            
+            // Try fetching from backend if email is known
+            const email = sessionStorage.getItem('sp_email') || p.email;
+            if (email) {
+                try {
+                    const res = await fetch('/api/profile', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await res.json();
+                    if (data.success && data.user) {
+                        const first = data.user.name.split(' ')[0] || '';
+                        const last = data.user.name.split(' ').slice(1).join(' ') || '';
+                        p = { ...p, firstName: first, lastName: last, email: data.user.email };
+                        saveProfileData(p);
+                    }
+                } catch(e) {}
+            }
+
+            const fullName = p.firstName + ' ' + (p.lastName || '');
             const initial = (p.firstName[0] || 'P').toUpperCase();
-            const langMap = { en: 'English', hi: 'Hindi', hinglish: 'Hinglish', bn: 'Bengali', ta: 'Tamil', te: 'Telugu' };
 
             document.getElementById('nav-username').textContent = p.firstName;
             document.getElementById('nav-avatar').textContent = initial;

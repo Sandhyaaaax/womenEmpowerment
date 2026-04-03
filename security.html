@@ -1479,7 +1479,6 @@
     const MODEL_URL = './models';
     let videoStream = null;
 
-<<<<<<< HEAD
 async function sendOTP() {
   const ph = document.getElementById('phone-input').value.trim();
   if (ph.length < 7) { alert('Please enter a valid mobile number.'); return; }
@@ -1605,7 +1604,6 @@ async function verifyOTP() {
     if (btn) { btn.disabled = false; btn.textContent = 'Verify & Enter HerShield →'; }
   }
 }
-=======
     async function startCamera() {
       const video = document.getElementById('camera-feed');
       const placeholder = document.getElementById('face-placeholder');
@@ -1624,8 +1622,6 @@ async function verifyOTP() {
         throw err;
       }
     }
->>>>>>> 96a9b5cf16f4dbb2f4d276f8c95075cd10759947
-
     async function simulateFaceScan(btn) {
       btn.textContent = '⏳ Loading AI Models…';
       btn.disabled = true; btn.style.opacity = '0.75';
@@ -1647,12 +1643,39 @@ async function verifyOTP() {
       status.innerHTML = '<div class="cam-live-dot"></div> Analyzing facial features for gender...';
       const video = document.getElementById('camera-feed');
       let scanInterval, attempts = 0;
+      let pastPositions = [];
+      let isLive = false;
+
       scanInterval = setInterval(async () => {
         attempts++;
         const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withAgeAndGender();
         if (detections) {
           const { gender, genderProbability: prob } = detections;
-          if (gender === 'female') {
+          const box = detections.detection.box;
+
+          // Liveness Check: Detect natural slight wobble over 6 frames to reject static photos
+          pastPositions.push({ x: box.x, y: box.y });
+          if (pastPositions.length > 6) pastPositions.shift();
+          
+          if (pastPositions.length === 6) {
+            const dx = Math.abs(pastPositions[0].x - pastPositions[5].x);
+            const dy = Math.abs(pastPositions[0].y - pastPositions[5].y);
+            // Must have slight movement (> 2px) but not huge erratic movement (< 50px)
+            if ((dx > 2 || dy > 2) && (dx < 50 && dy < 50)) {
+               isLive = true;
+            }
+          }
+
+          if (gender === 'male' && prob >= 0.8) {
+            clearInterval(scanInterval);
+            status.innerHTML = '❌ Access Denied: Not a female or girl.';
+            alert('Error: Male detected. Only women or girls are permitted to verify.');
+            if (videoStream) videoStream.getTracks().forEach(t => t.stop());
+            btn.textContent = 'Try Again'; btn.disabled = false; btn.style.opacity = '1';
+            return;
+          }
+
+          if (gender === 'female' && isLive) {
             clearInterval(scanInterval);
             status.innerHTML = '<div class="cam-live-dot" style="background:#22c55e"></div> Female verified!';
             if (videoStream) videoStream.getTracks().forEach(t => t.stop());
@@ -1687,18 +1710,12 @@ async function verifyOTP() {
               btn.textContent = '👁️ Start Face Scan';
               btn.disabled = false; btn.style.opacity = '1';
             }, 2000);
-          } else if (gender === 'male' && prob >= 0.8) {
-            clearInterval(scanInterval);
-            status.innerHTML = '❌ Access Denied: Not a female or girl.';
-            alert('Error: Not a female or girl detected.');
-            if (videoStream) videoStream.getTracks().forEach(t => t.stop());
-            btn.textContent = 'Try Again'; btn.disabled = false; btn.style.opacity = '1';
           }
         }
-        if (attempts > 50) {
+        if (attempts > 60) {
           clearInterval(scanInterval);
-          status.innerHTML = '❌ No clear female face detected. Try again.';
-          alert('No confident female face detected. Please ensure good lighting.');
+          status.innerHTML = '❌ No clear live female face detected. Try moving slightly.';
+          alert('No confident live female face detected. Please ensure good lighting and move your head slightly to prove you are not a photo.');
           if (videoStream) videoStream.getTracks().forEach(t => t.stop());
           btn.textContent = 'Try Again'; btn.disabled = false; btn.style.opacity = '1';
         }
