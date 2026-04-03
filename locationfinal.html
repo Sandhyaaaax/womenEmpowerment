@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<!-- Google Maps API for distance computation (Placeholder Key) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=geometry" async defer></script>
 <style>
 :root {
   --blush:#FF6B8A;--coral:#FF4560;--mauve:#C06B8A;--plum:#8B3A62;
@@ -837,7 +839,7 @@ async function setCustomRoute() {
     APP.followMode = false;
     document.getElementById('btn-follow').classList.remove('active');
 
-    const distKm = haversine(fromCoords.lat, fromCoords.lng, toCoords.lat, toCoords.lng) / 1000;
+    const distKm = await getCorrectDistance(fromCoords.lat, fromCoords.lng, toCoords.lat, toCoords.lng);
     document.getElementById('sb-dist').textContent = distKm.toFixed(2) + ' km';
     showToast(`🗺 Route set · ${distKm.toFixed(1)} km`, `${shorten(fromCoords.name)} → ${shorten(toCoords.name)}`);
   } else {
@@ -1118,6 +1120,41 @@ function updatePosition(lat, lng, accuracy, speedMs, altitude) {
   document.getElementById('badge-acc').textContent  = Math.round(accuracy||0)+' m';
   document.getElementById('badge-alt').textContent  = altitude?Math.round(altitude)+' m':'— m';
   if (APP.updateCount % 5 === 0) addActivity('pink','📍',`Location updated · ${(APP.totalDistance/1000).toFixed(2)} km travelled`, timeAgo(new Date()));
+}
+
+async function getCorrectDistance(lat1, lon1, lat2, lon2) {
+  // Use Google Maps Distance Matrix API if loaded
+  if (typeof google !== 'undefined' && google.maps && google.maps.DistanceMatrixService) {
+    try {
+      const res = await new Promise((resolve) => {
+        new google.maps.DistanceMatrixService().getDistanceMatrix({
+          origins: [{lat: lat1, lng: lon1}],
+          destinations: [{lat: lat2, lng: lon2}],
+          travelMode: 'DRIVING'
+        }, (res, status) => {
+          if (status === 'OK' && res.rows[0].elements[0].status === 'OK') {
+            resolve(res.rows[0].elements[0].distance.value / 1000);
+          } else resolve(null);
+        });
+      });
+      if (res !== null) return res;
+    } catch(e) {}
+  }
+  
+  // Fallback to OSRM API (acting as a free alternative for accurate road distance)
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.routes && data.routes.length > 0) {
+      return data.routes[0].distance / 1000;
+    }
+  } catch (err) {
+    console.warn("OSRM Router failed, falling back to Haversine straight line.", err);
+  }
+
+  // Final fallback to straight line
+  return haversine(lat1, lon1, lat2, lon2) / 1000;
 }
 
 function haversine(lat1,lng1,lat2,lng2) {
