@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakhi — Health & Wellness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="health.css">
+</head>
+<body>
+
+<!-- ── NAV (same as Sakhi) ── -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="final.html">
+      <div class="logo-mark">🛡️</div>
+      Sak<span class="hi">hi</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="final.html">Safety</a></li>
+      <li><a href="#period" class="nav-active">Period</a></li>
+      <li><a href="#mood">Mood</a></li>
+      <li><a href="#journal">Journal</a></li>
+      <li><a href="#community">Community</a></li>
+    </ul>
+    <button class="btn-nav" onclick="document.getElementById('selfcare').scrollIntoView({behavior:'smooth'})">My Wellness</button>
+  </div>
+  <!-- mobile hamburger -->
+  <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="final.html">🛡️ Safety</a>
+    <a href="#period">🌸 Period Tracker</a>
+    <a href="#mood">😊 Mood</a>
+    <a href="#wellness-checkin">🧘 Check-In</a>
+    <a href="#calm">🍃 Calm</a>
+    <a href="#selfcare">✨ Self-Care</a>
+    <a href="#journal">📓 Journal</a>
+    <a href="#community">👭 Community</a>
+  </div>
+</nav>
+
+<!-- ── WELLNESS HERO ── -->
+<section class="wellness-hero">
+  <div class="wh-blob wh-blob1"></div>
+  <div class="wh-blob wh-blob2"></div>
+  <div class="wh-blob wh-blob3"></div>
+  <div class="wellness-hero-inner">
+    <div class="wh-eyebrow"><span class="eyebrow-dot"></span> Women's Health & Wellness Hub</div>
+    <h1>Your Body. Your Mind.<br><em>Your Safe Space.</em></h1>
+    <p class="wh-desc">A private, supportive space built just for you — track your cycle, log your moods, journal your thoughts, and connect with women who understand.</p>
+    <div class="wh-feature-pills">
+      <span class="wh-pill" onclick="scrollToSection('#period')">🌸 Period Tracker</span>
+      <span class="wh-pill" onclick="scrollToSection('#mood')">😊 Mood Log</span>
+      <span class="wh-pill" onclick="scrollToSection('#wellness-checkin')">🧘 Check-In</span>
+      <span class="wh-pill" onclick="scrollToSection('#calm')">🍃 Calm</span>
+      <span class="wh-pill" onclick="scrollToSection('#selfcare')">✨ Self-Care</span>
+      <span class="wh-pill" onclick="scrollToSection('#journal')">📓 Journal</span>
+    </div>
+    <div class="wh-trust-strip">
+      <span>🔒 Fully Private</span>
+      <span class="sep">·</span>
+      <span>👤 Anonymous Options</span>
+      <span class="sep">·</span>
+      <span>💜 Women-Only</span>
+      <span class="sep">·</span>
+      <span>🚫 Zero Data Sold</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  1. PERIOD TRACKER
+══════════════════════════════ -->
+<section class="wellness-section" id="period">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">🌸 Cycle Tracking</div>
+      <h2>Period <em>Tracker</em></h2>
+      <p>Know your cycle, understand your body, and never be surprised again.</p>
+    </div>
+
+    <div class="period-layout reveal">
+      <!-- Calendar + Info -->
+      <div class="period-left">
+        <div class="period-card">
+          <div class="period-card-top">
+            <div class="pc-label">Your Cycle Overview</div>
+            <div class="pc-month-nav">
+              <button class="mn-btn" onclick="changeMonth(-1)">‹</button>
+              <span id="month-label">July 2026</span>
+              <button class="mn-btn" onclick="changeMonth(1)">›</button>
+            </div>
+          </div>
+          <div class="mini-cal" id="mini-cal"></div>
+          <div class="cal-legend">
+            <span class="leg-item"><span class="leg-dot period-dot"></span>Period</span>
+            <span class="leg-item"><span class="leg-dot fertile-dot"></span>Fertile</span>
+            <span class="leg-item"><span class="leg-dot ovulation-dot"></span>Ovulation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Stats + Symptoms -->
+      <div class="period-right">
+        <div class="period-stats-row">
+          <div class="pstat-card">
+            <div class="pstat-icon">📅</div>
+            <div class="pstat-num" id="days-until">8</div>
+            <div class="pstat-label">Days until<br>next period</div>
+          </div>
+          <div class="pstat-card">
+            <div class="pstat-icon">🌸</div>
+            <div class="pstat-num" id="cycle-length-disp">28</div>
+            <div class="pstat-label">Avg cycle<br>length</div>
+          </div>
+          <div class="pstat-card">
+            <div class="pstat-icon">🌡️</div>
+            <div class="pstat-num">Day 20</div>
+            <div class="pstat-label">Current<br>cycle day</div>
+          </div>
+        </div>
+
+        <!-- Phase indicator -->
+        <div class="phase-bar-card">
+          <div class="phase-title">Current Phase</div>
+          <div class="phase-track">
+            <div class="phase-seg seg-period">Period<br><small>1–5</small></div>
+            <div class="phase-seg seg-follicular">Follicular<br><small>6–13</small></div>
+            <div class="phase-seg seg-ovulation active-phase">Ovulation<br><small>14</small></div>
+            <div class="phase-seg seg-luteal">Luteal<br><small>15–28</small></div>
+          </div>
+          <div class="phase-cursor" style="left:calc(57% - 7px)"></div>
+          <div class="phase-active-label">You are in the <strong>Luteal Phase</strong> — Day 20</div>
+        </div>
+
+        <!-- Symptom logger -->
+        <div class="symptom-card">
+          <div class="symp-title">Log Today's Symptoms</div>
+          <div class="symp-grid" id="symp-grid">
+            <button class="symp-btn" onclick="toggleSymp(this)">🤕 Cramps</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">😮‍💨 Bloating</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">😴 Fatigue</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">🌀 Mood Swings</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">🤯 Headache</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">🍫 Cravings</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">💧 Spotting</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">😰 Back Pain</button>
+            <button class="symp-btn" onclick="toggleSymp(this)">🌊 Heavy Flow</button>
+          </div>
+          <div class="symp-actions" style="display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap;">
+            <div class="form-group-inline">
+              <label class="fl">Cycle Length</label>
+              <input type="number" id="cycle-len-input" class="small-input" value="28" min="21" max="45" onchange="updateCycle()">
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button id="btn-start-period" onclick="startNewPeriod()" style="border: 1px solid #FF6B8A; color: #FF6B8A; background: #fff5f8; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">🩸 Period Started Today</button>
+              <button class="btn-save" onclick="savePeriodLog()">Save Today's Log</button>
+            </div>
+          </div>
+          <div class="symp-note" id="symp-saved" style="display:none">✓ Saved for today!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  2. MOOD TRACKER
+══════════════════════════════ -->
+<section class="wellness-section alt-bg" id="mood">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">😊 Mood Tracking</div>
+      <h2>How Are You <em>Feeling?</em></h2>
+      <p>Track your emotional patterns and learn what your mood is telling you.</p>
+    </div>
+
+    <div class="mood-layout reveal">
+      <!-- Mood selector -->
+      <div class="mood-selector-card">
+        <div class="mood-card-title">Log Today's Mood</div>
+        <div class="mood-date-label" id="mood-today-date"></div>
+        <div class="mood-grid">
+          <button class="mood-btn" data-mood="happy" onclick="selectMood(this,'happy')"><span class="mood-emoji">😄</span><span class="mood-name">Happy</span></button>
+          <button class="mood-btn" data-mood="calm" onclick="selectMood(this,'calm')"><span class="mood-emoji">😌</span><span class="mood-name">Calm</span></button>
+          <button class="mood-btn" data-mood="tired" onclick="selectMood(this,'tired')"><span class="mood-emoji">😴</span><span class="mood-name">Tired</span></button>
+          <button class="mood-btn" data-mood="stressed" onclick="selectMood(this,'stressed')"><span class="mood-emoji">😤</span><span class="mood-name">Stressed</span></button>
+          <button class="mood-btn" data-mood="anxious" onclick="selectMood(this,'anxious')"><span class="mood-emoji">😰</span><span class="mood-name">Anxious</span></button>
+          <button class="mood-btn" data-mood="low" onclick="selectMood(this,'low')"><span class="mood-emoji">😔</span><span class="mood-name">Low</span></button>
+          <button class="mood-btn" data-mood="angry" onclick="selectMood(this,'angry')"><span class="mood-emoji">😠</span><span class="mood-name">Angry</span></button>
+          <button class="mood-btn" data-mood="overwhelmed" onclick="selectMood(this,'overwhelmed')"><span class="mood-emoji">🤯</span><span class="mood-name">Overwhelmed</span></button>
+        </div>
+        <textarea class="mood-note" id="mood-note" placeholder="Add a note about today... (optional)"></textarea>
+        <button class="btn-save full-w" onclick="saveMood()">Save Today's Mood</button>
+        <div class="save-confirm" id="mood-saved" style="display:none">✓ Mood logged!</div>
+      </div>
+
+      <!-- Weekly mood history -->
+      <div class="mood-history-card">
+        <div class="mood-card-title">This Week's Pattern</div>
+        <div class="mood-week" id="mood-week">
+          <!-- filled by JS -->
+        </div>
+        <div class="mood-insight" id="mood-insight">
+          <span class="insight-icon">💡</span>
+          <span id="insight-text">Log moods daily to see your weekly emotional pattern.</span>
+        </div>
+        <!-- Mini bar chart for mood freq -->
+        <div class="mood-freq-title">Mood Frequency (Last 7 Days)</div>
+        <div class="mood-bars" id="mood-bars"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  3. MENTAL WELLNESS CHECK-IN
+══════════════════════════════ -->
+<section class="wellness-section" id="wellness-checkin">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">🧘 Daily Check-In</div>
+      <h2>Mental Wellness <em>Check-In</em></h2>
+      <p>A gentle daily moment just for you — no judgment, just care.</p>
+    </div>
+
+    <div class="checkin-layout reveal">
+      <div class="checkin-card-wrap" id="checkin-wrap">
+        <!-- Progress -->
+        <div class="checkin-progress">
+          <div class="cp-fill" id="cp-fill" style="width:0%"></div>
+        </div>
+        <div class="checkin-step-label" id="step-label">Question 1 of 5</div>
+
+        <!-- Questions -->
+        <div class="checkin-question" id="checkin-q"></div>
+        <div class="checkin-options" id="checkin-opts"></div>
+        <div class="checkin-nav">
+          <button class="btn-ghost-sm" id="ci-prev" onclick="ciPrev()" style="display:none">← Back</button>
+          <button class="btn-primary-sm" id="ci-next" onclick="ciNext()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Result (hidden until done) -->
+      <div class="checkin-result" id="checkin-result" style="display:none">
+        <div class="cr-icon" id="cr-icon">🌸</div>
+        <h3 id="cr-title">You're doing wonderfully</h3>
+        <p id="cr-msg">Take a moment to breathe and appreciate yourself today.</p>
+        <div class="cr-actions">
+          <button class="btn-save" onclick="resetCheckin()">Do Another Check-In</button>
+          <button class="btn-ghost-sm" onclick="document.getElementById('calm').scrollIntoView({behavior:'smooth'})">Try Calm Exercises</button>
+        </div>
+      </div>
+
+      <!-- Side info -->
+      <div class="checkin-side">
+        <div class="checkin-tip-card">
+          <div class="ctc-icon">💜</div>
+          <div class="ctc-title">This is a safe space</div>
+          <p>Your responses are completely private and never shared with anyone. This check-in is for you, and only you.</p>
+        </div>
+        <div class="checkin-tip-card">
+          <div class="ctc-icon">🌱</div>
+          <div class="ctc-title">Small steps matter</div>
+          <p>Checking in with yourself is an act of self-love. Even 2 minutes of reflection can shift how you feel.</p>
+        </div>
+        <div class="checkin-tip-card">
+          <div class="ctc-icon">🤝</div>
+          <div class="ctc-title">You're not alone</div>
+          <p>Millions of women feel exactly what you feel. Our community and wellness tools are here whenever you need.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  4. QUICK CALM
+══════════════════════════════ -->
+<section class="wellness-section alt-bg" id="calm">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">🍃 Stress Relief</div>
+      <h2>Quick <em>Calm</em></h2>
+      <p>Take a pause. These gentle exercises are here whenever life feels too much.</p>
+    </div>
+
+    <div class="calm-grid reveal">
+
+      <!-- Breathing exercise -->
+      <div class="calm-card breathing-card">
+        <div class="calm-card-tag">Interactive Breathing</div>
+        <div class="breathing-circle" id="breath-circle">
+          <div class="bc-inner">
+            <span id="breath-text" style="pointer-events: none;">Touch & Hold</span>
+          </div>
+        </div>
+        <div class="breath-phase" id="breath-phase">Rest your thumb here to inhale</div>
+        <p class="calm-sub">Haptic feedback will pulse to guide your breath.<br>Release to exhale.</p>
+      </div>
+
+      <!-- Calm prompts -->
+      <div class="calm-card prompts-card">
+        <div class="calm-card-tag">Calming Prompts</div>
+        <div class="prompt-display" id="prompt-display">
+          <div class="prompt-icon">🌸</div>
+          <p id="prompt-text">"You are doing better than you think you are."</p>
+        </div>
+        <button class="btn-calm" onclick="nextPrompt()">Next Affirmation →</button>
+        <div class="prompt-counter" id="prompt-count">1 / 12</div>
+      </div>
+
+      <!-- Take a moment card -->
+      <div class="calm-card moment-card">
+        <div class="calm-card-tag">Take A Moment</div>
+        <div class="moment-steps">
+          <div class="ms-item active"><span class="ms-num">1</span><div><strong>Notice 5 things</strong> you can see around you</div></div>
+          <div class="ms-item"><span class="ms-num">2</span><div><strong>Feel 4 things</strong> you can physically touch</div></div>
+          <div class="ms-item"><span class="ms-num">3</span><div><strong>Hear 3 things</strong> in your environment</div></div>
+          <div class="ms-item"><span class="ms-num">4</span><div><strong>Smell 2 things</strong> near you</div></div>
+          <div class="ms-item"><span class="ms-num">5</span><div><strong>Taste 1 thing</strong> — sip some water 💧</div></div>
+        </div>
+        <div class="grounding-label">5-4-3-2-1 Grounding Technique</div>
+      </div>
+
+      <!-- Emotional support -->
+      <div class="calm-card support-card">
+        <div class="calm-card-tag">Emotional Support</div>
+        <div class="support-msgs">
+          <div class="sm-item">🌸 <span>You are allowed to take up space.</span></div>
+          <div class="sm-item">💪 <span>Rest is productive. You deserve it.</span></div>
+          <div class="sm-item">🌊 <span>Your feelings are valid — always.</span></div>
+          <div class="sm-item">✨ <span>You don't have to be okay all the time.</span></div>
+          <div class="sm-item">🦋 <span>Small progress is still progress.</span></div>
+        </div>
+        <div class="support-emergency">
+          Need someone to talk to?<br>
+          <a href="tel:iCall: 9152987821" class="support-link">iCall: 9152987821 (India)</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  5. SELF-CARE ROUTINE BUILDER
+══════════════════════════════ -->
+<section class="wellness-section" id="selfcare">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">✨ Self-Care</div>
+      <h2>Your Daily <em>Self-Care</em> Routine</h2>
+      <p>Build the routine that works for you — check off each act of self-love.</p>
+    </div>
+
+    <div class="selfcare-layout reveal">
+      <!-- Routine checklist -->
+      <div class="selfcare-main">
+        <div class="routine-header">
+          <div class="routine-title">Today's Routine</div>
+          <div class="routine-date" id="routine-date"></div>
+          <div class="routine-progress-text"><span id="done-count">0</span> / <span id="total-count">0</span> done</div>
+        </div>
+        <div class="routine-progress-bar"><div class="rpb-fill" id="rpb-fill" style="width:0%"></div></div>
+
+        <div class="routine-list" id="routine-list">
+          <!-- generated by JS -->
+        </div>
+
+        <div class="routine-add">
+          <input type="text" id="custom-habit" class="routine-input" placeholder="Add your own habit... (e.g. Read for 10 min)">
+          <button class="btn-add-habit" onclick="addCustomHabit()">+ Add</button>
+        </div>
+
+        <button class="btn-save" onclick="saveRoutine()" style="margin-top:1rem;width:100%">Save Today's Progress</button>
+        <div class="save-confirm" id="routine-saved" style="display:none">✓ Great job today! 🌸</div>
+      </div>
+
+      <!-- Skin & Self-care tracker -->
+      <div class="selfcare-side">
+        <div class="skincare-card">
+          <div class="sc-card-title">🧴 Skincare Log</div>
+          <div class="skincare-steps" id="skincare-steps">
+            <div class="sk-step">
+              <input type="checkbox" id="sk1" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk1">☀️ Morning Cleanser</label>
+            </div>
+            <div class="sk-step">
+              <input type="checkbox" id="sk2" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk2">💧 Toner / Essence</label>
+            </div>
+            <div class="sk-step">
+              <input type="checkbox" id="sk3" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk3">🌿 Serum</label>
+            </div>
+            <div class="sk-step">
+              <input type="checkbox" id="sk4" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk4">🧴 Moisturizer</label>
+            </div>
+            <div class="sk-step">
+              <input type="checkbox" id="sk5" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk5">☀️ Sunscreen (AM)</label>
+            </div>
+            <div class="sk-step">
+              <input type="checkbox" id="sk6" class="sk-check" onchange="updateSkinScore()">
+              <label for="sk6">🌙 Night Cream</label>
+            </div>
+          </div>
+          <div class="skin-score-bar">
+            <div class="ssb-label">Skincare Score</div>
+            <div class="ssb-track"><div class="ssb-fill" id="ssb-fill" style="width:0%"></div></div>
+            <div class="ssb-pct" id="ssb-pct">0%</div>
+          </div>
+          <textarea class="skin-note" placeholder="Skin notes — what worked today? 🌸"></textarea>
+        </div>
+
+        <!-- Weekly consistency tracker -->
+        <div class="consistency-card">
+          <div class="cc-title">Weekly Consistency</div>
+          <div class="consistency-grid">
+            <div class="cg-day" id="cg-mon"><span>M</span></div>
+            <div class="cg-day" id="cg-tue"><span>T</span></div>
+            <div class="cg-day" id="cg-wed"><span>W</span></div>
+            <div class="cg-day" id="cg-thu"><span>T</span></div>
+            <div class="cg-day" id="cg-fri"><span>F</span></div>
+            <div class="cg-day" id="cg-sat"><span>S</span></div>
+            <div class="cg-day" id="cg-sun"><span>S</span></div>
+          </div>
+          <div class="cc-note">Check off your routine each day to build your streak 🔥</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  6. PRIVATE HEALTH JOURNAL
+══════════════════════════════ -->
+<section class="wellness-section alt-bg" id="journal">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">📓 Private Journal</div>
+      <h2>Your Safe <em>Journal</em></h2>
+      <p>Write freely. This is your private space — no one else can see this.</p>
+    </div>
+
+    <div class="journal-layout reveal">
+      <!-- Journal writer -->
+      <div class="journal-main">
+        <div class="journal-top-bar">
+          <div class="journal-date-disp" id="journal-date-disp"></div>
+          <div class="journal-tags">
+            <button class="jtag" onclick="setJournalTag(this,'mood')" data-tag="mood">😊 Mood</button>
+            <button class="jtag" onclick="setJournalTag(this,'health')" data-tag="health">💊 Health</button>
+            <button class="jtag" onclick="setJournalTag(this,'body')" data-tag="body">🌸 Body</button>
+            <button class="jtag" onclick="setJournalTag(this,'stress')" data-tag="stress">😤 Stress</button>
+            <button class="jtag" onclick="setJournalTag(this,'gratitude')" data-tag="gratitude">🙏 Gratitude</button>
+          </div>
+        </div>
+        <input type="text" class="journal-title-input" id="journal-title" placeholder="Give this entry a title...">
+        <textarea class="journal-textarea" id="journal-body" placeholder="Write whatever is on your mind...
+&#10;
+How are you feeling today? What's happening with your body? What are you grateful for? What do you need more of?&#10;
+&#10;This is your safe space. 💜"></textarea>
+        <div class="journal-footer">
+          <span class="jf-chars" id="jf-chars">0 words</span>
+          <div class="jf-actions">
+            <button class="btn-ghost-sm" onclick="clearJournal()">Clear</button>
+            <button class="btn-save" onclick="saveJournalEntry()">Save Entry 🔒</button>
+          </div>
+        </div>
+        <div class="save-confirm" id="journal-saved" style="display:none">✓ Entry saved privately!</div>
+      </div>
+
+      <!-- Journal history sidebar -->
+      <div class="journal-sidebar">
+        <div class="js-title">Recent Entries</div>
+        <div class="js-entries" id="js-entries">
+          <div class="js-empty">
+            <span class="jse-icon">📓</span>
+            <p>No entries yet. Start writing your first reflection.</p>
+          </div>
+        </div>
+        <div class="journal-privacy-note">
+          <span>🔒</span> All entries are encrypted and stored only on your device. We cannot read them.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  7. ANONYMOUS COMMUNITY
+══════════════════════════════ -->
+<section class="wellness-section" id="community">
+  <div class="ws-inner">
+    <div class="ws-header reveal">
+      <div class="ws-tag">👭 Community</div>
+      <h2>Anonymous Women's <em>Health Space</em></h2>
+      <p>Share, support, and be heard — completely anonymously in a women-only space.</p>
+    </div>
+
+    <div class="community-layout reveal">
+      <!-- Post creator -->
+      <div class="community-main">
+        <div class="post-composer">
+          <div class="pc-anon-badge">👤 Posting as Anonymous Sister</div>
+          <div class="pc-topic-row">
+            <label class="form-label-sm">Choose topic</label>
+            <div class="topic-chips">
+              <button class="topic-chip active" onclick="setTopic(this,'period')">🌸 Period</button>
+              <button class="topic-chip" onclick="setTopic(this,'pcos')">🩺 PCOS</button>
+              <button class="topic-chip" onclick="setTopic(this,'stress')">😤 Stress</button>
+              <button class="topic-chip" onclick="setTopic(this,'bodyimage')">🦋 Body Image</button>
+              <button class="topic-chip" onclick="setTopic(this,'skincare')">🧴 Skincare</button>
+              <button class="topic-chip" onclick="setTopic(this,'emotional')">💜 Emotional</button>
+              <button class="topic-chip" onclick="setTopic(this,'selfcare')">✨ Self-Care</button>
+            </div>
+          </div>
+          <textarea class="community-textarea" id="community-post" placeholder="Share your experience, ask a question, or offer support...
+&#10;
+This is a safe, anonymous, women-only space. 💜"></textarea>
+          <div class="pc-footer">
+            <span class="pc-anon-note">🔒 100% anonymous · Women-only · Moderated</span>
+            <button class="btn-save" onclick="submitPost()">Share Anonymously</button>
+          </div>
+        </div>
+
+        <!-- Feed -->
+        <div class="community-feed" id="community-feed">
+          <!-- posts generated by JS -->
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="community-sidebar">
+        <div class="cs-card">
+          <div class="cs-title">Community Guidelines</div>
+          <ul class="cs-rules">
+            <li>✅ Be kind and supportive</li>
+            <li>✅ Share personal experiences</li>
+            <li>✅ Offer encouragement</li>
+            <li>🚫 No personal attacks</li>
+            <li>🚫 No medical diagnoses</li>
+            <li>🚫 No personal information</li>
+          </ul>
+        </div>
+        <div class="cs-card">
+          <div class="cs-title">Active Topics</div>
+          <div class="active-topics">
+            <div class="at-item" onclick="setTopic(document.querySelector('.topic-chip'),'period')">🌸 Period Struggles <span class="at-count">42 posts</span></div>
+            <div class="at-item">🧴 Skincare Tips <span class="at-count">28 posts</span></div>
+            <div class="at-item">💜 Emotional Support <span class="at-count">67 posts</span></div>
+            <div class="at-item">🩺 PCOS Journey <span class="at-count">19 posts</span></div>
+            <div class="at-item">🦋 Body Positivity <span class="at-count">35 posts</span></div>
+          </div>
+        </div>
+        <div class="cs-card privacy-cs-card">
+          <span>🔒</span>
+          <p>Your identity is never revealed. Posts are anonymous to all users and moderated for safety.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER (same as Sakhi) ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="foot-brand-logo"><div class="logo-mark-sm">🛡️</div>Sakhi</div>
+        <p class="foot-desc">Safety that works even when you can't. Designed exclusively for women, with anonymity, encryption, and zero data selling baked into every feature.</p>
+        <div class="social-btns">
+          <a class="soc" href="#">𝕏</a><a class="soc" href="#">◎</a><a class="soc" href="#">in</a><a class="soc" href="#">✉</a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Wellness</h4><ul><li><a href="#period">Period Tracker</a></li><li><a href="#mood">Mood Log</a></li><li><a href="#wellness-checkin">Check-In</a></li><li><a href="#calm">Quick Calm</a></li><li><a href="#selfcare">Self-Care</a></li></ul></div>
+      <div class="footer-col"><h4>Community</h4><ul><li><a href="#community">Health Space</a></li><li><a href="#journal">My Journal</a></li><li><a href="final.html">Safety Hub</a></li><li><a href="#">About Us</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Emergency Info</a></li><li><a href="#">Terms</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Sakhi. Made with <span class="hi">♥</span> for every woman's safety & wellness.</p>
+      <div class="foot-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon-w" id="toast-icon-w"></div>
+  <div class="toast-text">
+    <h5 id="toast-title-w"></h5>
+    <p id="toast-msg-w"></p>
+  </div>
+</div>
+
+<script src="health.js"></script>
+</body>
+</html>
+
+

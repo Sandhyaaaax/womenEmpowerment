@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hershield — Safety That Works Even When You Can't</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blush:    #FF6B8A;
+  --coral:    #FF4560;
+  --mauve:    #C06B8A;
+  --plum:     #8B3A62;
+  --dark:     #1C0F18;
+  --cream:    #FFF6F0;
+  --soft:     #FDE8EF;
+  --muted:    #8A6070;
+  --white:    #ffffff;
+  --grad:     linear-gradient(135deg, #FF6B8A 0%, #C06B8A 50%, #8B3A62 100%);
+  --grad-soft:linear-gradient(135deg, rgba(255,107,138,0.15) 0%, rgba(139,58,98,0.15) 100%);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 68px;
+  background: rgba(255,246,240,0.88); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,107,138,0.1);
+}
+.nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 2rem; height: 100%; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Fraunces', serif; font-size: 1.45rem; font-weight: 900; color: var(--dark); letter-spacing: -0.02em; }
+.logo-mark { width: 34px; height: 34px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 16px rgba(255,107,138,0.45); }
+.logo span.hi { color: var(--blush); }
+.nav-links { display: flex; gap: 0.2rem; list-style: none; align-items: center; }
+.nav-links a { padding: 8px 18px; border-radius: 50px; text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--muted); transition: 0.25s; }
+.nav-links a:hover { color: var(--dark); background: rgba(255,107,138,0.08); }
+.btn-nav { padding: 10px 26px; border-radius: 50px; background: var(--grad); border: none; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 600; color: white; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 18px rgba(255,107,138,0.4); }
+.btn-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,138,0.55); }
+
+/* ── HERO ── */
+.hero { min-height: 100vh; padding-top: 68px; display: flex; align-items: center; background: linear-gradient(160deg, #FFF6F0 0%, #FDE8EF 40%, #F7E0F0 100%); position: relative; overflow: hidden; }
+.hero-blob { position: absolute; pointer-events: none; border-radius: 50%; filter: blur(80px); opacity: 0.55; animation: blobDrift 12s ease-in-out infinite; }
+.blob1 { width: 500px; height: 500px; background: rgba(255,107,138,0.25); top: -80px; right: -100px; }
+.blob2 { width: 360px; height: 360px; background: rgba(192,107,138,0.2); bottom: 0; left: -80px; animation-delay: 4s; }
+@keyframes blobDrift { 0%,100%{transform:scale(1) translate(0,0);} 50%{transform:scale(1.06) translate(15px,-15px);} }
+.hero-inner { max-width: 1160px; margin: 0 auto; padding: 4rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; position: relative; z-index: 2; width: 100%; }
+.hero-copy { padding-right: 1rem; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid rgba(255,107,138,0.2); padding: 7px 18px 7px 10px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; color: var(--plum); margin-bottom: 1.6rem; box-shadow: 0 2px 12px rgba(255,107,138,0.12); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blush); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.75);} }
+h1 { font-family: 'Fraunces', serif; font-size: clamp(2.6rem, 5vw, 4.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; color: var(--dark); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards; }
+h1 em { font-style: italic; color: var(--blush); }
+.hero-desc { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 430px; margin-bottom: 2.4rem; opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 2.2rem; opacity: 0; animation: fadeUp 0.7s ease 0.65s forwards; }
+.btn-primary { padding: 15px 32px; border-radius: 50px; background: var(--grad); border: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; color: white; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 28px rgba(255,107,138,0.42); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(255,107,138,0.55); }
+.btn-ghost-hero { padding: 14px 28px; border-radius: 50px; background: white; border: 1.5px solid rgba(255,107,138,0.25); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--dark); cursor: pointer; transition: 0.3s; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.btn-ghost-hero:hover { border-color: var(--blush); }
+.hero-stats { display: flex; gap: 2rem; opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards; }
+.stat-item { text-align: center; }
+.stat-num { display: block; font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+.stat-label { font-size: 0.73rem; color: var(--muted); font-weight: 500; margin-top: 4px; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:none;} }
+
+/* HERO RIGHT VISUAL */
+.hero-visual { display: flex; align-items: center; justify-content: center; position: relative; height: 520px; opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
+.orbit-ring { position: absolute; width: 420px; height: 420px; border-radius: 50%; border: 2px dashed rgba(192,107,138,0.35); animation: spinOrbit 18s linear infinite; }
+.orbit-ring::before, .orbit-ring::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--grad); box-shadow: 0 0 12px rgba(255,107,138,0.7); }
+.orbit-ring::before { top: -7px; left: 50%; transform: translateX(-50%); }
+.orbit-ring::after  { bottom: -7px; right: 22%; }
+.orbit-ring-2 { position: absolute; width: 360px; height: 360px; border-radius: 50%; border: 1px solid rgba(255,107,138,0.15); animation: spinOrbit 28s linear infinite reverse; }
+.orbit-ring-2::before { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: rgba(192,107,138,0.6); top: 30%; right: -5px; }
+@keyframes spinOrbit { to { transform: rotate(360deg); } }
+.circle-wrap { position: relative; z-index: 5; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; border: 4px solid white; box-shadow: 0 20px 60px rgba(192,107,138,0.3), 0 0 0 8px rgba(255,107,138,0.08); animation: sideFloat 5s ease-in-out infinite; flex-shrink: 0; }
+.circle-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+@keyframes sideFloat { 0%,100%{transform:translateX(0);} 33%{transform:translateX(-14px);} 66%{transform:translateX(12px);} }
+.fl-badge { position: absolute; background: white; border-radius: 16px; padding: 10px 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); font-size: 0.75rem; font-weight: 600; z-index: 10; }
+.fb-alert-card { top: 8%; right: 3%; border-left: 3px solid var(--blush); animation: floatBadge 5s ease-in-out infinite; }
+.fb-safe { bottom: 15%; left: 2%; animation: floatBadge 6s ease-in-out 1s infinite; }
+.fb-loc { bottom: 8%; right: 12%; animation: floatBadge 4.5s ease-in-out 0.5s infinite; }
+.fb-title { font-size: 0.78rem; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+.fb-sub { font-size: 0.67rem; color: var(--muted); font-weight: 400; }
+.badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes floatBadge { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+/* ══════════════════════════════════════
+   TICKER / MARQUEE STRIP
+══════════════════════════════════════ */
+.ticker-wrap {
+  overflow: hidden; white-space: nowrap;
+  background: var(--grad);
+  padding: 13px 0;
+  position: relative; z-index: 5;
+}
+.ticker-track {
+  display: inline-block;
+  animation: tickerScroll 32s linear infinite;
+  white-space: nowrap;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: white; font-size: 0.82rem; font-weight: 600;
+  padding: 0 2rem; letter-spacing: 0.01em;
+}
+.ticker-sep { color: rgba(255,255,255,0.45); font-size: 1rem; }
+@keyframes tickerScroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+/* ══════════════════════════════════════
+   APP MOCKUP SHOWCASE
+══════════════════════════════════════ */
+.mockup-section {
+  padding: 100px 2rem 80px;
+  background: linear-gradient(180deg, #FFF0F5 0%, #FAF8FF 100%);
+  position: relative; overflow: hidden;
+}
+.mockup-section::before {
+  content: ''; position: absolute; top: -150px; left: -150px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,138,0.09), transparent 70%);
+  pointer-events: none;
+}
+.mockup-section::after {
+  content: ''; position: absolute; bottom: -100px; right: -100px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,107,138,0.08), transparent 70%);
+  pointer-events: none;
+}
+.mockup-inner { max-width: 1160px; margin: 0 auto; position: relative; z-index: 2; }
+.mockup-header { text-align: center; margin-bottom: 4rem; }
+.mockup-header .tag {
+  display: inline-block; background: white; border: 1px solid rgba(255,107,138,0.2);
+  color: var(--plum); padding: 6px 18px; border-radius: 50px;
+  font-size: 0.73rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(255,107,138,0.1);
+}
+.mockup-header h2 { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; }
+.mockup-header h2 em { font-style: italic; color: var(--blush); }
+.mockup-header p { font-size: 0.9rem; color: var(--muted); margin-top: 0.8rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+/* three phones layout */
+.phones-stage {
+  display: flex; justify-content: center; align-items: flex-end;
+  gap: 28px; margin-bottom: 3rem;
+}
+.phone-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  transition: transform 0.4s ease;
+}
+.phone-wrap:hover { transform: translateY(-12px); }
+.phone-wrap.center-phone { transform: translateY(-20px); }
+.phone-wrap.center-phone:hover { transform: translateY(-32px); }
+
+.phone-shell {
+  width: 178px;
+  background: #1a0e18;
+  border-radius: 36px;
+  padding: 8px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.07);
+  position: relative;
+}
+.phone-shell::before {
+  content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+  width: 52px; height: 5px; background: #111; border-radius: 3px; z-index: 10;
+}
+.phone-screen {
+  background: #fff5f8;
+  border-radius: 30px;
+  padding: 20px 13px 13px;
+  overflow: hidden;
+  min-height: 340px;
+}
+
+/* ── screen 1: check-in ── */
+.ps-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 0.6rem; color: #aaa; }
+.ps-live-pill { background: rgba(255,107,138,0.1); color: var(--blush); border-radius: 50px; padding: 3px 9px; font-weight: 700; font-size: 0.58rem; display: flex; align-items: center; gap: 5px; }
+.ps-live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blush); animation: pulse 1.2s ease-in-out infinite; }
+
+.checkin-card { background: white; border-radius: 14px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 12px rgba(255,107,138,0.08); }
+.ci-label { font-size: 0.52rem; font-weight: 700; color: var(--blush); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+.ci-route { font-size: 0.82rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.ci-bar { height: 4px; border-radius: 2px; background: #f0e8ee; margin-bottom: 6px; overflow: hidden; }
+.ci-bar-fill { height: 100%; width: 58%; border-radius: 2px; background: var(--grad); }
+.ci-timer { font-size: 1.1rem; font-weight: 900; font-family: 'Fraunces', serif; color: var(--dark); }
+.ci-timer span { font-size: 0.58rem; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+.contacts-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.c-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: white; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.c-watching { font-size: 0.6rem; color: var(--muted); }
+.safe-btn { width: 100%; padding: 10px; border-radius: 10px; background: var(--grad); border: none; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(255,107,138,0.35); }
+.phone-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-align: center; }
+
+/* ── screen 2: stats ── */
+.stat-ring-wrap { display: flex; justify-content: center; margin-bottom: 16px; margin-top: 8px; }
+.stat-ring-svg { width: 100px; height: 100px; }
+.sr-bg { fill: none; stroke: #f0e8ee; stroke-width: 8; }
+.sr-fill { fill: none; stroke: url(#rg); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 251; stroke-dashoffset: 68; }
+.ring-center { font-size: 0.7rem; }
+.ring-num { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 900; }
+.ring-pct { font-size: 0.6rem; fill: var(--blush); }
+
+.stat-divider { height: 1px; background: #f0e8ee; margin: 10px 0; }
+.stat-row { text-align: center; margin-bottom: 8px; }
+.stat-big { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 900; color: var(--dark); line-height: 1; }
+.stat-big sup { font-size: 0.7rem; color: var(--blush); vertical-align: super; }
+.stat-small { font-size: 0.62rem; color: var(--muted); margin-top: 2px; }
+
+/* ── screen 3: alert ── */
+.alert-banner { background: rgba(255,107,138,0.08); border: 1px solid rgba(255,107,138,0.2); border-radius: 10px; padding: 9px 10px; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.alert-icon { font-size: 1rem; }
+.alert-text h4 { font-size: 0.62rem; font-weight: 700; color: var(--coral); }
+.alert-text p { font-size: 0.55rem; color: var(--muted); }
+.alert-tag { display: inline-block; font-size: 0.52rem; font-weight: 700; color: var(--blush); background: rgba(255,107,138,0.1); padding: 2px 8px; border-radius: 50px; margin-bottom: 8px; }
+
+/* route map visual */
+.route-map { background: rgba(255,107,138,0.04); border: 1px solid rgba(255,107,138,0.1); border-radius: 10px; padding: 10px; margin-bottom: 10px; height: 90px; position: relative; overflow: hidden; }
+
+.action-btns { display: flex; gap: 5px; }
+.ab { padding: 7px 0; border-radius: 8px; font-size: 0.57rem; font-weight: 700; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; flex: 1; display: flex; align-items: center; justify-content: center; gap: 3px; }
+.ab-share { background: rgba(255,107,138,0.1); color: var(--blush); }
+.ab-rec   { background: rgba(251,191,36,0.12); color: #c0860a; }
+.ab-sos   { background: rgba(255,69,96,0.1);  color: var(--coral); }
+.ab-note  { text-align: center; font-size: 0.52rem; color: var(--muted); margin-top: 6px; }
+
+/* pill tabs below phones */
+.feature-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.f-pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: white; border: 1.5px solid rgba(255,107,138,0.15);
+  padding: 9px 18px; border-radius: 50px;
+  font-size: 0.78rem; font-weight: 600; color: var(--dark);
+  cursor: pointer; transition: 0.25s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.f-pill:hover { border-color: var(--blush); color: var(--blush); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,138,0.15); }
+.f-pill.active { background: var(--grad); color: white; border-color: transparent; box-shadow: 0 6px 20px rgba(255,107,138,0.3); }
+
+/* ══════════════════════════════════════
+   JOIN / CTA SECTION (replaces auth form)
+══════════════════════════════════════ */
+.join-section {
+  padding: 100px 2rem;
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+.join-section::before {
+  content: ''; position: absolute; top: -200px; left: -200px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,138,0.07), transparent 70%);
+  pointer-events: none;
+}
+.join-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: center;
+}
+.join-copy .section-tag {
+  display: inline-block; background: var(--soft);
+  border: 1px solid rgba(255,107,138,0.2); color: var(--plum);
+  padding: 6px 18px; border-radius: 50px;
+  font-size: 0.73rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.join-copy h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 900; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 1rem;
+}
+.join-copy h2 em { font-style: italic; color: var(--blush); }
+.join-copy p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; margin-bottom: 2rem; }
+.trust-items { display: flex; flex-direction: column; gap: 14px; }
+.trust-item { display: flex; align-items: center; gap: 13px; }
+.trust-icon { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.ti1{background:rgba(255,107,138,0.1);} .ti2{background:rgba(192,107,138,0.1);} .ti3{background:rgba(34,197,94,0.1);}
+.trust-text h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
+.trust-text p { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+
+/* CTA CARD */
+.cta-card {
+  background: linear-gradient(145deg, #FFF6F0 0%, #FDE8EF 100%);
+  border-radius: 32px;
+  padding: 48px 40px;
+  border: 1px solid rgba(255,107,138,0.12);
+  box-shadow: 0 24px 64px rgba(192,107,138,0.12);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.cta-card-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 12px 32px rgba(255,107,138,0.38);
+  margin-bottom: 24px;
+}
+.cta-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.7rem; font-weight: 900;
+  letter-spacing: -0.025em; line-height: 1.15;
+  color: var(--dark); margin-bottom: 10px;
+}
+.cta-card h3 em { font-style: italic; color: var(--blush); }
+.cta-card p {
+  font-size: 0.88rem; color: var(--muted);
+  line-height: 1.7; max-width: 280px;
+  margin-bottom: 32px;
+}
+.cta-btns {
+  display: flex; flex-direction: column;
+  gap: 13px; width: 100%;
+}
+.btn-cta-main {
+  width: 100%; padding: 16px 32px;
+  border-radius: 50px;
+  background: var(--grad);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  color: white; cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 8px 28px rgba(255,107,138,0.4);
+  letter-spacing: 0.01em;
+}
+.btn-cta-main:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(255,107,138,0.55); }
+.btn-cta-ghost {
+  width: 100%; padding: 15px 32px;
+  border-radius: 50px;
+  background: white;
+  border: 1.5px solid rgba(255,107,138,0.3);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  color: var(--dark); cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.btn-cta-ghost:hover { border-color: var(--blush); color: var(--blush); transform: translateY(-2px); }
+
+.cta-divider {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; margin: 4px 0;
+}
+.cta-divider span { font-size: 0.74rem; color: var(--muted); white-space: nowrap; }
+.cta-divider::before, .cta-divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,107,138,0.15);
+}
+
+.cta-secure {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin-top: 22px;
+  padding: 10px 16px; border-radius: 50px;
+  background: rgba(34,197,94,0.06);
+  border: 1px solid rgba(34,197,94,0.15);
+  font-size: 0.69rem; color: rgba(22,163,74,0.85); font-weight: 600;
+  width: 100%;
+}
+
+/* ── FEATURES ── */
+.features-section { padding: 100px 2rem; background: linear-gradient(180deg, var(--soft) 0%, var(--cream) 100%); }
+.features-inner { max-width: 1160px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+.section-header .tag { display: inline-block; background: white; border: 1px solid rgba(255,107,138,0.2); color: var(--plum); padding: 6px 18px; border-radius: 50px; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(255,107,138,0.1); }
+.section-header h2 { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; letter-spacing: -0.025em; margin-bottom: 0.9rem; line-height: 1.1; }
+.section-header h2 em { font-style: italic; color: var(--blush); }
+.section-header p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; max-width: 500px; margin: 0 auto; }
+.how-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-bottom: 70px; position: relative; }
+.how-steps::before { content: ''; position: absolute; top: 36px; left: calc(16.6% + 20px); right: calc(16.6% + 20px); height: 2px; background: linear-gradient(90deg, var(--blush), var(--mauve), var(--plum)); opacity: 0.25; z-index: 0; }
+.how-step { background: white; border-radius: 22px; padding: 28px 22px; text-align: center; transition: 0.35s; border: 1px solid transparent; position: relative; z-index: 1; margin: 6px; }
+.how-step:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(192,107,138,0.15); border-color: rgba(255,107,138,0.1); }
+.step-number { width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 18px; background: var(--grad); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 900; box-shadow: 0 8px 24px rgba(255,107,138,0.35); }
+.how-step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.how-step p { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+.feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+.feat-card { background: white; border-radius: 22px; padding: 28px 24px; border: 1px solid rgba(255,107,138,0.06); transition: 0.35s; cursor: pointer; }
+.feat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 56px rgba(192,107,138,0.15); border-color: rgba(255,107,138,0.15); }
+.feat-ico { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 16px; transition: 0.3s; }
+.feat-card:hover .feat-ico { transform: scale(1.1) rotate(-4deg); }
+.fico1{background:linear-gradient(135deg,rgba(255,107,138,0.15),rgba(255,107,138,0.05));}
+.fico2{background:linear-gradient(135deg,rgba(192,107,138,0.15),rgba(192,107,138,0.05));}
+.fico3{background:linear-gradient(135deg,rgba(34,197,94,0.12),rgba(34,197,94,0.04));}
+.feat-card h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 7px; }
+.feat-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+/* ── FOOTER ── */
+footer { background: var(--dark); color: white; padding: 72px 2rem 36px; }
+.footer-inner { max-width: 1160px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 52px; }
+.foot-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.foot-brand-logo .logo-mark-sm { width: 28px; height: 28px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 14px; -webkit-text-fill-color: white; }
+.foot-desc { font-size: 0.82rem; color: rgba(255,255,255,0.38); line-height: 1.75; max-width: 230px; margin-bottom: 20px; }
+.social-btns { display: flex; gap: 9px; }
+.soc { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.38); font-size: 0.85rem; text-decoration: none; cursor: pointer; transition: 0.3s; }
+.soc:hover { background: var(--grad); border-color: transparent; color: white; }
+.footer-col h4 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { font-size: 0.8rem; color: rgba(255,255,255,0.28); text-decoration: none; transition: 0.3s; }
+.footer-col a:hover { color: rgba(255,255,255,0.8); }
+.footer-bottom { padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { font-size: 0.75rem; color: rgba(255,255,255,0.22); }
+.footer-bottom .hi { color: var(--blush); }
+.foot-links { display: flex; gap: 1.5rem; }
+.foot-links a { font-size: 0.75rem; color: rgba(255,255,255,0.22); text-decoration: none; transition: 0.3s; }
+.foot-links a:hover { color: rgba(255,255,255,0.6); }
+
+/* scroll reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* responsive */
+@media(max-width:1024px) {
+  .hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-desc { margin: 0 auto 2.4rem; }
+  .hero-btns { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-visual { display: none; }
+  .join-inner { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: repeat(2,1fr); }
+  .how-steps { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .phones-stage { flex-wrap: wrap; }
+}
+@media(max-width:640px) {
+  .nav-links { display: none; }
+  .feat-grid,.how-steps { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .phone-wrap.center-phone { transform: none; }
+  .cta-card { padding: 36px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+     <a class="logo" href="index.html">
+      <div class="logo-mark">❤️</div>
+      Her<span class="hi">Shield</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#features">Chatbot</a></li>
+      <li><a href="#features">Safety Map</a></li>
+      <li><a href="#features">Health Tracker</a></li>
+    </ul>
+    <button class="btn-nav" onclick="window.location.href='login.html'">Login / Sign Up</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><div class="eyebrow-dot"></div> Safety for Women, by Design</div>
+      <h1>Safety That Works<br>Even When<br>You <em>Can't.</em></h1>
+      <p class="hero-desc">HerShield silently monitors your journey and automatically alerts your trusted contacts if something feels wrong — no button, no panic, just peace of mind.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Start Safe Tracking →</button>
+        <button class="btn-ghost-hero" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-num">50K+</span><span class="stat-label">Women Protected</span></div>
+        <div class="stat-item"><span class="stat-num">99.9%</span><span class="stat-label">Alert Accuracy</span></div>
+        <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">Data Sold</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring-2"></div>
+      <div class="circle-wrap">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80&fit=crop&crop=face" alt="Woman safely using HerShield" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=600&q=80&fit=crop&crop=top';">
+      </div>
+      <div class="fl-badge fb-alert-card"><div class="fb-title">🔔 Auto Alert Active</div><div class="fb-sub">Notifying if no check-in</div></div>
+      <div class="fl-badge fb-safe"><span class="badge-pill"><div class="live-dot"></div> Tracking Live</span></div>
+      <div class="fl-badge fb-loc"><span class="badge-pill">📍 Location Shared</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER STRIP -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">🛡️ Auto Safety Alerts</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">📍 Real-Time GPS Tracking</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🧠 AI Distress Detection</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🌸 Women's Health Hub</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">💬 Multilingual Chatbot</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🗺️ Community Safety Map</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🔒 End-to-End Encrypted</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">👁️ Face-Only Authentication</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🚨 Silent SOS in 3 Seconds</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🛡️ Auto Safety Alerts</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">📍 Real-Time GPS Tracking</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🧠 AI Distress Detection</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🌸 Women's Health Hub</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">💬 Multilingual Chatbot</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🗺️ Community Safety Map</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🔒 End-to-End Encrypted</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">👁️ Face-Only Authentication</span>
+    <span class="ticker-sep">✦</span>
+    <span class="ticker-item">🚨 Silent SOS in 3 Seconds</span>
+    <span class="ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- APP MOCKUP SHOWCASE -->
+<section class="mockup-section">
+  <div class="mockup-inner">
+    <div class="mockup-header reveal">
+      <div class="tag">See It In Action</div>
+      <h2>The App That <em>Thinks</em> For You</h2>
+      <p>Three screens. One mission: keep you safe, automatically, without you needing to do a thing.</p>
+    </div>
+
+    <svg width="0" height="0" style="position:absolute;pointer-events:none;">
+      <defs>
+        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B8A"/>
+          <stop offset="100%" style="stop-color:#8B3A62"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="phones-stage reveal">
+
+      <!-- PHONE 1: Check-In Active -->
+      <div class="phone-wrap">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <div class="ps-topbar">
+              <span>10:14</span>
+              <b style="font-size:0.65rem;color:#1C0F18;">HerShield</b>
+              <span class="ps-live-pill"><span class="ps-live-dot"></span> LIVE</span>
+            </div>
+            <div class="checkin-card">
+              <div class="ci-label">♡ ACTIVE CHECK-IN</div>
+              <div class="ci-route">Office → Home</div>
+              <div class="ci-bar"><div class="ci-bar-fill"></div></div>
+              <div class="ci-timer">18:02 <span>left of 30 min</span></div>
+            </div>
+            <div class="contacts-row">
+              <div class="c-avatar" style="background:#e04484;">M</div>
+              <div class="c-avatar" style="background:#6c63ff;margin-left:-8px;">R</div>
+              <div class="c-avatar" style="background:#22c55e;margin-left:-8px;">S</div>
+              <span class="c-watching">3 contacts watching</span>
+            </div>
+            <button class="safe-btn">✓ I'm Safe</button>
+          </div>
+        </div>
+        <div class="phone-label">Check-In Active</div>
+      </div>
+
+      <!-- PHONE 2: Stats (center, elevated) -->
+      <div class="phone-wrap center-phone">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <div class="stat-ring-wrap">
+              <svg class="stat-ring-svg" viewBox="0 0 100 100">
+                <circle class="sr-bg" cx="50" cy="50" r="40"/>
+                <circle class="sr-fill" cx="50" cy="50" r="40" transform="rotate(-90 50 50)"/>
+                <text x="50" y="46" text-anchor="middle" font-family="Fraunces,serif" font-size="18" font-weight="900" fill="#1C0F18">73</text>
+                <text x="50" y="58" text-anchor="middle" font-size="9" fill="#FF6B8A" font-weight="700">%</text>
+              </svg>
+            </div>
+            <div style="text-align:center;font-size:0.62rem;color:var(--muted);margin-bottom:10px;line-height:1.4;">women feel unsafe<br>travelling at night</div>
+            <div class="stat-divider"></div>
+            <div class="stat-row" style="margin-top:10px;">
+              <div class="stat-big">91<sup>%</sup></div>
+              <div class="stat-small">of apps need manual SOS</div>
+            </div>
+            <div class="stat-divider" style="margin:8px 0;"></div>
+            <div class="stat-row">
+              <div class="stat-big" style="font-size:1.8rem;">3<sup style="font-size:0.65rem;color:var(--muted);">s</sup></div>
+              <div class="stat-small">to trigger silent protect</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-label" style="font-weight:700;color:var(--blush);">Why HerShield</div>
+      </div>
+
+      <!-- PHONE 3: Auto Escalation -->
+      <div class="phone-wrap">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <div class="ps-topbar">
+              <span>9:02</span>
+              <b style="font-size:0.65rem;color:#1C0F18;">HerShield</b>
+              <span style="background:rgba(255,69,96,0.12);color:#FF4560;border-radius:50px;padding:3px 9px;font-weight:700;font-size:0.57rem;">! ALERT</span>
+            </div>
+            <div class="alert-banner">
+              <span class="alert-icon">⚠️</span>
+              <div class="alert-text">
+                <h4>AI Risk: Medium</h4>
+                <p>Distress pattern · SOS ready</p>
+              </div>
+            </div>
+            <div class="alert-tag">Auto Escalation</div>
+            <div class="route-map">
+              <svg width="100%" height="100%" viewBox="0 0 150 80" preserveAspectRatio="none">
+                <line x1="0" y1="20" x2="150" y2="20" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <line x1="0" y1="40" x2="150" y2="40" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="150" y2="60" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <line x1="37" y1="0" x2="37" y2="80" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <line x1="75" y1="0" x2="75" y2="80" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <line x1="112" y1="0" x2="112" y2="80" stroke="rgba(255,107,138,0.1)" stroke-width="1"/>
+                <path d="M 20 58 Q 50 55 70 42 Q 90 28 120 20" stroke="#FF6B8A" stroke-width="2" fill="none" stroke-dasharray="4,3" opacity="0.6"/>
+                <path d="M 20 58 Q 55 50 90 48" stroke="#FF6B8A" stroke-width="2.5" fill="none"/>
+                <circle cx="20" cy="58" r="5" fill="rgba(108,99,255,0.7)" stroke="white" stroke-width="1.5"/>
+                <circle cx="90" cy="48" r="5" fill="#FF6B8A" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="action-btns">
+              <button class="ab ab-share">📍 Shared</button>
+              <button class="ab ab-rec">🔴 Rec</button>
+              <button class="ab ab-sos">🚨 SOS</button>
+            </div>
+            <div class="ab-note">Auto-triggered · No tap needed</div>
+          </div>
+        </div>
+        <div class="phone-label">Auto Escalation</div>
+      </div>
+
+    </div>
+
+    <!-- feature pills -->
+    <div class="feature-pills reveal">
+      <div class="f-pill active">♡ Proactive Check-In</div>
+      <div class="f-pill">🔒 Silent Triggers</div>
+      <div class="f-pill">📁 Evidence Vault</div>
+      <div class="f-pill">🤖 AI Detection</div>
+      <div class="f-pill">🗺️ Safety Map</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- JOIN / CTA SECTION -->
+<section class="join-section" id="join">
+  <div class="join-inner">
+    <div class="join-copy reveal">
+      <div class="section-tag">Secure Access</div>
+      <h2>Only You Can<br>Enter. <em>Ever.</em></h2>
+      <p>HerShield is built exclusively for women. Your account, your data, your safety — protected at every step with end-to-end encryption and biometric access.</p>
+      <div class="trust-items">
+        <div class="trust-item">
+          <div class="trust-icon ti1">👁️</div>
+          <div class="trust-text"><h4>Face-Only Login</h4><p>Biometric authentication — no male accounts ever permitted.</p></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon ti2">🔐</div>
+          <div class="trust-text"><h4>End-to-End Encrypted</h4><p>Your location and messages — unreadable by anyone, including us.</p></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon ti3">🚫</div>
+          <div class="trust-text"><h4>Zero Data Selling</h4><p>We never sell, share, or monetize your personal information.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-card reveal">
+      <div class="cta-card-icon">🛡️</div>
+      <h3>Join <em>HerShield</em><br>Today</h3>
+      <p>50,000+ women already protected. Start your safe journey in seconds.</p>
+      <div class="cta-btns">
+        <button class="btn-cta-main" onclick="window.location.href='login.html'">
+          ✦ Create My Safe Account
+        </button>
+      </div>
+      <div class="cta-secure">
+        🔒 End-to-end encrypted &nbsp;·&nbsp; Women-exclusive &nbsp;·&nbsp; Zero data sold
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="features-inner">
+    <div class="section-header reveal">
+      <div class="tag">How HerShield Works</div>
+      <h2>Your Safety, <em>Automated.</em></h2>
+      <p>Three simple steps and HerShield does the rest — monitoring, detecting, and alerting — so you never have to fumble in a crisis.</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step reveal"><div class="step-number">1</div><h3>Quick Check-In</h3><p>Set your expected safe duration before heading out. One tap and you're fully protected in the background.</p></div>
+      <div class="how-step reveal"><div class="step-number">2</div><h3>Smart Monitoring</h3><p>AI continuously tracks your location, motion, and device activity in the background. No interaction needed.</p></div>
+      <div class="how-step reveal"><div class="step-number">3</div><h3>Automatic Alert</h3><p>If no response when time ends, your trusted contacts are notified instantly with your live GPS location.</p></div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal"><div class="feat-ico fico1">📍</div><h3>Real-Time Safety Tracking</h3><p>Set a timer before heading out. HerShield silently monitors your location. No response? It acts automatically on your behalf.</p></div>
+      <div class="feat-card reveal"><div class="feat-ico fico2">🧠</div><h3>AI Distress Detection</h3><p>On-device ML analyzes motion patterns and inactivity — even when you can't press a button. No audio is ever recorded.</p></div>
+      <div class="feat-card reveal"><div class="feat-ico fico3">🔔</div><h3>Automatic Emergency Alert</h3><p>Trusted contacts get notified with your exact GPS coordinates and movement history the moment something feels wrong.</p></div>
+      <div class="feat-card reveal"><div class="feat-ico fico1">🗺️</div><h3>Community Safety Map</h3><p>Crowd-sourced safety ratings — women mark and rate streets so others can travel with real, lived safety insights.</p></div>
+      <div class="feat-card reveal"><div class="feat-ico fico2">💬</div><h3>Multilingual Wellness Chatbot</h3><p>Talk in Hindi, Hinglish, or English — voice or text. Share how you feel; get support in the language you're most comfortable with.</p></div>
+      <div class="feat-card reveal"><div class="feat-ico fico3">🌸</div><h3>Period & Health Tracker</h3><p>Smart period reminders, PCOD guidance, breast health info, skincare community — one private, safe space for all women's health.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="foot-brand-logo"><div class="logo-mark-sm">🛡️</div>HerShield</div>
+        <p class="foot-desc">Safety that works even when you can't. Designed exclusively for women, by people who care deeply about every life.</p>
+        <div class="social-btns">
+          <a class="soc" href="#">𝕏</a><a class="soc" href="#">◎</a><a class="soc" href="#">in</a><a class="soc" href="#">✉</a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#">How It Works</a></li><li><a href="#">Features</a></li><li><a href="#">Safety Tracking</a></li><li><a href="#">Health Hub</a></li><li><a href="#">Community Map</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Our Mission</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+      <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Emergency Info</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HerShield. Made with <span class="hi">♥</span> for every woman's safety.</p>
+      <div class="foot-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
+    </div>
+  </div>
+</footer>
+ 
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i*80); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+document.querySelectorAll('.feat-card').forEach((c,i) => c.style.transitionDelay = (i*0.07)+'s');
+document.querySelectorAll('.how-step').forEach((c,i) => c.style.transitionDelay = (i*0.1)+'s');
+
+document.querySelectorAll('.f-pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.f-pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HerShield — Welcome Back</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
+
+body {
+  min-height: 100vh;
+  background: #1a0a14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ── OUTER CARD ── */
+.card {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 580px;
+  border-radius: 28px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+}
+
+/* ── LEFT PANEL ── */
+.left {
+  background: linear-gradient(145deg, #e8607a 0%, #c0517a 40%, #8b3060 75%, #5a1a3a 100%);
+  padding: 44px 44px 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative circles */
+.left::before {
+  content: '';
+  position: absolute;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  top: -60px; right: -80px;
+}
+.left::after {
+  content: '';
+  position: absolute;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  top: 80px; right: 60px;
+}
+
+.left-logo {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 52px; position: relative; z-index: 2;
+}
+.left-logo-icon {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.left-logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem; font-weight: 900;
+  color: white; letter-spacing: -0.02em;
+}
+
+.left-headline {
+  position: relative; z-index: 2;
+  margin-bottom: 20px;
+}
+.left-headline h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: white;
+}
+.left-headline h1 em {
+  font-style: italic;
+  display: block;
+}
+
+.left-desc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.75;
+  max-width: 320px;
+  margin-bottom: 32px;
+  position: relative; z-index: 2;
+}
+
+.feature-list {
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; z-index: 2;
+  flex: 1;
+}
+.feature-item {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 13px 16px;
+}
+.feature-item-icon {
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.feature-item-text {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.9);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.left-stats {
+  display: flex; gap: 0;
+  margin-top: 28px;
+  position: relative; z-index: 2;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 22px;
+}
+.left-stat {
+  flex: 1;
+  text-align: center;
+}
+.left-stat:not(:last-child) {
+  border-right: 1px solid rgba(255,255,255,0.12);
+}
+.ls-num {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: 1.7rem; font-weight: 900;
+  color: white; line-height: 1;
+  margin-bottom: 4px;
+}
+.ls-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+}
+
+/* ── RIGHT PANEL ── */
+.right {
+  background: #ffffff;
+  padding: 48px 52px;
+  display: flex;
+  flex-direction: column;
+}
+
+.back-link {
+  font-size: 0.82rem;
+  color: #9a7080;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 36px;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+.back-link:hover { color: #c0517a; }
+.back-arrow { font-size: 0.9rem; }
+
+.right-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 2rem; font-weight: 700;
+  color: #1a0a14;
+  margin-bottom: 8px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.right-title em {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: #d4456e;
+}
+.right-subtitle {
+  font-size: 0.88rem;
+  color: #9a7080;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* tab switcher */
+.tab-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #fdf0f4;
+  border-radius: 50px;
+  padding: 5px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(192,81,122,0.1);
+}
+.tab-btn {
+  padding: 11px;
+  border-radius: 50px;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  color: #9a7080;
+  background: transparent;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, #e8607a, #c0517a, #8b3060);
+  color: white;
+  box-shadow: 0 4px 16px rgba(192,81,122,0.35);
+}
+
+/* form */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 0.78rem; font-weight: 600;
+  color: #5a3045;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: #fff5f8;
+  border: 1.5px solid rgba(192,81,122,0.18);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #1a0a14;
+  outline: none;
+  transition: 0.25s;
+}
+.form-input::placeholder { color: #d4aab8; }
+.form-input:focus {
+  border-color: rgba(192,81,122,0.5);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(192,81,122,0.08);
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e8607a 0%, #c0517a 50%, #8b3060 100%);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 6px 22px rgba(192,81,122,0.38);
+  margin-top: 4px;
+  letter-spacing: 0.01em;
+}
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(192,81,122,0.52);
+}
+
+.form-note {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #9a7080;
+  margin-top: 14px;
+}
+.form-note a {
+  color: #d4456e;
+  font-weight: 700;
+  text-decoration: none;
+}
+.form-note a:hover { text-decoration: underline; }
+
+.secure-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 11px 16px;
+  background: #f3fdf6;
+  border: 1px solid rgba(34,197,94,0.18);
+  border-radius: 50px;
+  font-size: 0.7rem;
+  color: #16a34a;
+  font-weight: 600;
+}
+.secure-row span { color: #9a7080; }
+
+/* animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:none;} }
+.right > * { animation: fadeUp 0.5s ease both; }
+.back-link   { animation-delay: 0.05s; }
+.right-title { animation-delay: 0.1s; }
+.right-subtitle { animation-delay: 0.15s; }
+.tab-row     { animation-delay: 0.2s; }
+#active-form { animation-delay: 0.25s; }
+
+/* responsive */
+@media(max-width: 768px) {
+  .card { grid-template-columns: 1fr; min-height: auto; }
+  .left { padding: 36px 28px; }
+  .left-headline h1 { font-size: 2rem; }
+  .right { padding: 36px 28px; }
+  body { padding: 16px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <div class="left-logo">
+      <div class="left-logo-icon">❤️</div>
+      <span class="left-logo-text">HerShield</span>
+    </div>
+
+    <div class="left-headline">
+      <h1>Your Shield.<br><em>Always On.</em></h1>
+    </div>
+
+    <p class="left-desc">Join 50,000+ women who travel safer every day with intelligent, automated protection that works — even when they can't.</p>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <span class="feature-item-icon">🗺️</span>
+        <span class="feature-item-text">SafePath™ routes you through the safest streets automatically</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-item-icon">🕶️</span>
+        <span class="feature-item-text">Shadow Mode hides the app if you're being watched</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-item-icon">🚓</span>
+        <span class="feature-item-text">Nearest police auto-synced the moment distress is detected</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-item-icon">🔒</span>
+        <span class="feature-item-text">End-to-end encrypted — zero data ever sold</span>
+      </div>
+    </div>
+
+    <div class="left-stats">
+      <div class="left-stat">
+        <span class="ls-num">50K+</span>
+        <span class="ls-label">Protected</span>
+      </div>
+      <div class="left-stat">
+        <span class="ls-num">99.9%</span>
+        <span class="ls-label">Uptime</span>
+      </div>
+      <div class="left-stat">
+        <span class="ls-num">3s</span>
+        <span class="ls-label">To SOS</span>
+      </div>
+      <div class="left-stat">
+        <span class="ls-num">0</span>
+        <span class="ls-label">Data Sold</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <a class="back-link" href="index.html">
+      <span class="back-arrow">←</span> Back to HerShield
+    </a>
+
+    <div class="right-title">Welcome to <em>HerShield</em></div>
+    <p class="right-subtitle">Your safety account is exclusive to women. Create yours in under a minute.</p>
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="tab-btn" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="login-email" placeholder="yourname@gmail.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="login-password" placeholder="••••••••••">
+      </div>
+      <button class="btn-submit" id="btn-login-submit">Login Securely &amp; Enter HerShield →</button>
+      <div id="login-error" style="color: #e8607a; font-size: 0.8rem; text-align: center; margin-top: 8px; display: none;"></div>
+      <p class="form-note">No account? <a href="#" onclick="switchTab('signup');return false;">Create one free</a></p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="form-signup" style="display:none;">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" type="text" id="signup-name" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="signup-email" placeholder="yourname@gmail.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Create Password</label>
+        <input class="form-input" type="password" id="signup-password" placeholder="Min 8 characters">
+      </div>
+      <button class="btn-submit" id="btn-signup-submit">Create My Safe Account →</button>
+      <div id="signup-error" style="color: #e8607a; font-size: 0.8rem; text-align: center; margin-top: 8px; display: none;"></div>
+      <p class="form-note">Already have an account? <a href="#" onclick="switchTab('login');return false;">Login here</a></p>
+    </div>
+
+    <div class="secure-row">
+      🔒 End-to-end encrypted <span>·</span> Women-exclusive <span>·</span> Biometric verified
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  document.getElementById('form-login').style.display  = tab === 'login'  ? 'block' : 'none';
+  document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',  tab === 'login');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+}
+
+// auto-switch based on where user came from
+const mode = sessionStorage.getItem('sp_mode');
+if (mode === 'signup') switchTab('signup');
+
+function validateEmail(email) {
+  if (!email.endsWith('@gmail.com')) {
+    return 'Only @gmail.com emails are accepted for security verification.';
+  }
+  return null;
+}
+
+document.getElementById('btn-login-submit')?.addEventListener('click', async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errorEl = document.getElementById('login-error');
+
+  errorEl.style.display = 'none';
+
+  const emailErr = validateEmail(email);
+  if (emailErr) {
+    errorEl.textContent = emailErr;
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  if (!password) {
+    errorEl.textContent = 'Password is required.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      sessionStorage.setItem('sp_email', email);
+      window.location.href = 'security.html';
+    } else {
+      errorEl.textContent = data.message || 'Login failed';
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, simulating successful login for demo purposes.');
+    sessionStorage.setItem('sp_email', email);
+    window.location.href = 'security.html';
+  }
+});
+
+document.getElementById('btn-signup-submit')?.addEventListener('click', async () => {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const errorEl = document.getElementById('signup-error');
+
+  errorEl.style.display = 'none';
+
+  const emailErr = validateEmail(email);
+  if (emailErr) {
+    errorEl.textContent = emailErr;
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  if (!name || password.length < 8) {
+    errorEl.textContent = 'Valid name and min 8 char password required.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      sessionStorage.setItem('sp_email', email);
+      window.location.href = 'security.html';
+    } else {
+      errorEl.textContent = data.message || 'Signup failed';
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, simulating successful signup for demo purposes.');
+    sessionStorage.setItem('sp_email', email);
+    window.location.href = 'security.html';
+  }
+});
+</script>
+</body>
+</html>
